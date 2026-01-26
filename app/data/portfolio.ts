@@ -8,7 +8,7 @@ export const portfolioData = {
       status: "available for work",
       isActive: true
     },
-    tagline: "developer, tinkerer.",
+    tagline: "Chronically online, developer, tinkerer.",
     currentlyReading: "Designing Data Intensive Applications",
     bio: "Experienced in developing enterprise saas platforms with analytics and compliance first architecture.Building multi tenant systems,leveraging LLMs to power analytics pipelines."
   },
@@ -19,11 +19,14 @@ export const portfolioData = {
       role: "Software Engineer",
       period: "(june '24 — present)",
       location: "Remote",
-      description: "Building AI-powered solutions for enterprise clients",
+      description: "Building enterprise talent management platform with admin privileges and analytics infrastructure powered by LLM's serving 5 enterprise customers(500+ users)",
       responsibilities: [
-        "leading design initiatives for flagship productsleading design initiatives for flagship productsleading design initiatives for flagship productsleading design initiatives for flagship products",
-        "collaborating with cross-functional teams",
-        "architecting scalable solutions for enterprise clients"
+        "Integrated Microsoft SSO to implement passwordless authentication using OAuth2/PKCE flow.Established secure, seamless single sign-on experience across the platform",
+        "Built chat dashboard with analytics capabilities to derive insights from team communications",
+        "Created assessment dashboard enabling clients to assign and track technical assessments for talent",
+        "Created organizational admin panel for user role management, department organization, and bulk invitation workflows",
+        "Built operational scripts to automate organization setup, talent invitations, and cross-platform integrations (Platform Teams, GitHub)",
+        "Designed and implemented comprehensive talent onboarding system with multi-stage workflows",
       ],
       skills: ["FastAPI", "React", "MongoDB", "PostgreSQL", "Azure"],
       link: "https://trumio.ai/"
@@ -33,11 +36,12 @@ export const portfolioData = {
       role: "Software Engineer Intern",
       period: "(dec '23 — may '24)",
       location: "Remote",
-      description: "Developed features across fintech and e-commerce platforms",
+      description: "Developed full-stack features and integrations using FastAPI, MongoDB, React.js, and Azure services including approval workflows, CSV import, and automated certificate generation",
       responsibilities: [
-        "crafted digital experiences for diverse clients",
-        "developed features across fintech and e-commerce platforms",
-        "contributed to core product development"
+        "Engineered multi-level approval workflow for Admin Panel, enabling role-based authorization and request routing across different admin tiers",
+        "Implemented CSV import functionality to efficiently handle bulk uploads of static fields",
+        "Identified and resolved critical production bugs in the core application, improving system reliability and user experience",
+        "Automated talent certificate generation upon project completion using cron-based scheduling and Azure Blob Storage for document management and distribution"
       ],
       skills: ["FastAPI", "React", "MongoDB", "Python", "Azure"],
       link: "https://trumio.ai/"
@@ -45,13 +49,13 @@ export const portfolioData = {
     {
       company: "Ekko",
       role: "Frontend Intern",
-      period: "(july '22 — feb '21)",
+      period: "(july '22 — march '23)",
       location: "Kolkata",
-      description: "Created responsive web experiences for startups",
+      description: "Drove full-stack product development with frontend focus, authored technical documentation, and optimized application performance through code splitting and lazy loading techniques",
       responsibilities: [
-        "developed brand identities and web experiences",
-        "built responsive interfaces for startup clients",
-        "collaborated with design team on UI/UX improvements"
+        "Owned full-stack development responsibilities, building both frontend interfaces and backend using Firebase for the product",
+        "Authored comprehensive documentation covering complete frontend and backend architecture",
+        "Improved application performance through code splitting and lazy loading implementation, significantly reducing page load times and enhancing user experience on internal navigation"
       ],
       skills: ["React", "Firebase"],
       link: "https://ekko.network/"
