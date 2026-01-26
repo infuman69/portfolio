@@ -38,7 +38,7 @@ export default function WorkExperience({
       <p className="work-description max-w-2xl">{description}</p>
 
       <div className="mt-3">
-        <p className="text-muted font-bold text-sm mb-2">Skills & Tools</p>
+        <p className="text-muted font-bold text-sm mb-2">Tech Stack</p>
         <div className="flex flex-wrap gap-2">
           {skills.map((skill, idx) => (
             <span
