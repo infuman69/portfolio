@@ -1,8 +1,83 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: 0 0% 100%;
+  --foreground: 225 50% 15%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 225 50% 15%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 225 50% 15%;
+
+  --primary: 225 100% 41%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 225 30% 96%;
+  --secondary-foreground: 225 50% 15%;
+
+  --muted: 225 30% 96%;
+  --muted-foreground: 225 30% 45%;
+
+  --accent: 225 100% 41%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 225 20% 90%;
+  --input: 225 20% 90%;
+  --ring: 225 100% 41%;
+
+  --radius: 0.25rem;
+
+  /* Custom portfolio tokens */
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --text-primary: 225 50% 15%;
+  --text-secondary: 225 30% 35%;
+  --text-muted: 225 30% 40%;
+
+  --accent-blue: 225 100% 41%;
+  --accent-blue-light: 225 100% 55%;
+  --accent-blue-dark: 225 100% 30%;
+
+  --max-content: 900px;
+}
+
+.dark {
+  --background: 225 30% 6%;
+  --foreground: 225 20% 90%;
+
+  --card: 225 30% 10%;
+  --card-foreground: 225 20% 90%;
+
+  --popover: 225 30% 10%;
+  --popover-foreground: 225 20% 90%;
+
+  --primary: 225 100% 65%;
+  --primary-foreground: 225 30% 6%;
+
+  --secondary: 225 30% 15%;
+  --secondary-foreground: 225 20% 90%;
+
+  --muted: 225 30% 15%;
+  --muted-foreground: 225 20% 60%;
+
+  --accent: 225 100% 65%;
+  --accent-foreground: 225 30% 6%;
+
+  --border: 225 30% 20%;
+  --input: 225 30% 20%;
+  --ring: 225 100% 65%;
+
+  --text-primary: 225 20% 92%;
+  --text-secondary: 225 20% 75%;
+  --text-muted: 225 25% 80%;
+
+  --accent-blue: 225 100% 65%;
+  --accent-blue-light: 225 100% 75%;
+  --accent-blue-dark: 225 100% 50%;
 }
 
 @theme inline {
@@ -12,15 +87,120 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-mono), monospace;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .page-container {
+    @apply mx-auto px-6 py-12 md:py-16;
+    max-width: var(--max-content);
+  }
+
+  .section-title {
+    @apply text-lg font-medium mb-6;
+    color: hsl(var(--text-primary));
+  }
+
+  .text-body {
+    @apply text-sm leading-relaxed;
+    color: hsl(var(--text-secondary));
+  }
+
+  .text-muted {
+    @apply text-sm;
+    color: hsl(var(--text-muted));
+  }
+
+  .text-accent {
+    @apply text-sm;
+    color: hsl(var(--accent-blue));
+  }
+
+  .link-accent {
+    @apply underline decoration-1 underline-offset-2 transition-colors duration-200;
+    color: hsl(var(--accent-blue));
+  }
+
+  .link-accent:hover {
+    color: hsl(var(--accent-blue-light));
+  }
+
+  .link-primary {
+    @apply underline decoration-1 underline-offset-2 transition-colors duration-200;
+    color: hsl(var(--primary));
+  }
+
+  .link-primary:hover {
+    opacity: 0.8;
+  }
+
+  .status-dot {
+    @apply inline-block w-2 h-2 rounded-full mr-2;
+  }
+
+  .status-active {
+    background-color: hsl(var(--accent-blue));
+  }
+
+  .status-inactive {
+    background-color: hsl(var(--accent-blue-dark));
+  }
+
+  .work-item {
+    @apply mb-6;
+  }
+
+  .work-title {
+    @apply font-medium underline decoration-1 underline-offset-2 cursor-pointer transition-colors duration-200;
+    color: hsl(var(--primary));
+  }
+
+  .work-title:hover {
+    color: hsl(var(--accent-blue-light));
+  }
+
+  .work-role {
+    @apply text-sm;
+    color: hsl(var(--text-secondary));
+  }
+
+  .work-date {
+    @apply text-sm;
+    color: hsl(var(--accent-blue));
+  }
+
+  .work-description {
+    @apply text-sm mt-2;
+    color: hsl(var(--text-secondary));
+  }
+
+  .project-item {
+    @apply mb-5;
+  }
+
+  .project-title {
+    @apply font-medium underline decoration-1 underline-offset-2 cursor-pointer transition-colors duration-200;
+    color: hsl(var(--accent-blue));
+  }
+
+  .project-title:hover {
+    color: hsl(var(--accent-blue-light));
+  }
+
+  .project-description {
+    @apply text-sm mt-1;
+    color: hsl(var(--text-secondary));
+  }
+
+  .nav-link {
+    @apply text-sm transition-colors duration-200;
+    color: hsl(var(--text-muted));
+  }
+
+  .nav-link:hover {
+    color: hsl(var(--primary));
+  }
 }

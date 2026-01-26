@@ -1,8 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) portfolio website for Soham Saha Roy, bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+### Environment Setup
+
+1. Copy the example environment file:
+```bash
+cp .env.example .env.local
+```
+
+2. Update the environment variables in `.env.local`:
+```env
+NEXT_PUBLIC_SITE_URL=https://ssroy.com
+```
+
+### Running the Development Server
+
+First, install dependencies and run the development server:
 
 ```bash
 npm run dev
@@ -19,6 +33,25 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Updating Content
+
+All portfolio content is centralized in `app/data/portfolio.ts`. Update this file to modify:
+- Personal information (name, location, role, bio)
+- Work experience
+- Projects
+- Social media links
+
+The site URL is configured via environment variables for easy deployment across different environments.
+
+## Features
+
+- 🎨 Dark/Light theme support
+- 📱 Fully responsive design
+- ⚡ Optimized for performance
+- 🔍 SEO optimized with structured data
+- 📊 Sitemap and robots.txt auto-generated
+- 🎯 TypeScript for type safety
 
 ## Learn More
 
