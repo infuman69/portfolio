@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/app/lib/blog";
-import { getPostViews } from "@/app/lib/analytics";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -10,17 +9,6 @@ export const metadata: Metadata = {
 
 export default async function BlogPage() {
   const posts = getAllPosts();
-
-  const viewCounts = await Promise.all(
-    posts.map(async (post) => ({
-      slug: post.slug,
-      views: await getPostViews(post.slug),
-    }))
-  );
-
-  const viewsMap = Object.fromEntries(
-    viewCounts.map((v) => [v.slug, v.views])
-  );
 
   return (
     <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
@@ -46,13 +34,7 @@ export default async function BlogPage() {
                 </span>
               </div>
               <p className="blog-post-description">{post.description}</p>
-              <div className="flex items-center gap-3">
-                <p className="blog-post-readtime">{post.readTime} min read</p>
-                <span className="blog-post-readtime">·</span>
-                <p className="blog-post-readtime">
-                  {viewsMap[post.slug]?.toLocaleString() ?? 0} views
-                </p>
-              </div>
+              <p className="blog-post-readtime">{post.readTime} min read</p>
             </div>
           ))}
         </div>
