@@ -50,7 +50,6 @@ export default async function BlogPostPage({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
-
   const formattedDate = new Date(post.date)
     .toLocaleDateString("en-US", {
       year: "numeric",
@@ -68,7 +67,7 @@ export default async function BlogPostPage({
 
         <h1 className="blog-post-title">{post.title}</h1>
         <p className="blog-post-meta">
-          {formattedDate} · {post.readTime} min read
+          {formattedDate} · {post.readTime} min read 
         </p>
 
         <div className="mdx-content">

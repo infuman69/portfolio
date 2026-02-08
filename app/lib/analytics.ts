@@ -18,6 +18,7 @@ export async function getPostViews(slug: string): Promise<number> {
     }
 
     const data: SimpleAnalyticsResponse = await response.json();
+    console.log(data)
     return data.pageviews ?? 0;
   } catch {
     return 0;
