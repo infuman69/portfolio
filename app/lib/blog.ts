@@ -10,6 +10,7 @@ export interface BlogPostMeta {
   date: string;
   description: string;
   readTime: number;
+  image?: string;
 }
 
 export interface BlogPost extends BlogPostMeta {
@@ -31,6 +32,7 @@ export function getAllPosts(): BlogPostMeta[] {
       date: data.date,
       description: data.description,
       readTime: data.readTime,
+      image: data.image,
     };
   });
 
@@ -52,6 +54,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
     date: data.date,
     description: data.description,
     readTime: data.readTime,
+    image: data.image,
     content,
   };
 }

@@ -17,6 +17,8 @@ export async function generateMetadata({
   const post = getPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ssroy.com";
+
   return {
     title: post.title,
     description: post.description,
@@ -25,6 +27,17 @@ export async function generateMetadata({
       description: post.description,
       type: "article",
       publishedTime: post.date,
+      ...(post.image && {
+        images: [{ url: `${baseUrl}${post.image}` }],
+      }),
+    },
+    twitter: {
+      card: post.image ? "summary_large_image" : "summary",
+      title: post.title,
+      description: post.description,
+      ...(post.image && {
+        images: [`${baseUrl}${post.image}`],
+      }),
     },
   };
 }
