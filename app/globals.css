@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: 0 0% 100%;
   --foreground: 225 50% 15%;
@@ -95,7 +97,7 @@ body {
 
 @layer components {
   .page-container {
-    @apply mx-auto px-6 py-12 md:py-16;
+    @apply mx-auto px-6 pt-20 pb-12 md:pt-24 md:pb-16;
     max-width: var(--max-content);
   }
 
@@ -202,5 +204,154 @@ body {
 
   .nav-link:hover {
     color: hsl(var(--primary));
+  }
+
+  /* Navbar */
+  .navbar {
+    @apply fixed top-0 left-0 right-0 z-50;
+    background-color: hsl(var(--background) / 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .navbar-inner {
+    @apply mx-auto px-6 py-3 flex items-center justify-between;
+    max-width: var(--max-content);
+  }
+
+  /* Blog list page */
+  .blog-title {
+    @apply text-3xl font-light mb-2;
+    color: hsl(var(--text-primary));
+  }
+
+  .blog-subtitle {
+    @apply text-sm mb-8;
+    color: hsl(var(--text-secondary));
+  }
+
+  .blog-post-item {
+    @apply py-6;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .blog-post-item:last-child {
+    border-bottom: none;
+  }
+
+  .blog-post-header {
+    @apply flex justify-between items-baseline gap-4;
+  }
+
+  .blog-post-date {
+    @apply text-sm shrink-0;
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-post-description {
+    @apply text-sm mt-1;
+    color: hsl(var(--text-secondary));
+  }
+
+  .blog-post-readtime {
+    @apply text-xs mt-1;
+    color: hsl(var(--text-muted));
+  }
+
+  /* Blog post page */
+  .blog-back-link {
+    @apply text-sm mb-8 inline-block transition-colors duration-200;
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-back-link:hover {
+    color: hsl(var(--primary));
+  }
+
+  .blog-post-title {
+    @apply text-3xl font-bold mb-2;
+    color: hsl(var(--text-primary));
+  }
+
+  .blog-post-meta {
+    @apply text-sm mb-8;
+    color: hsl(var(--accent-blue));
+  }
+
+  /* MDX prose styling */
+  .mdx-content h2 {
+    @apply text-xl font-bold mt-8 mb-4;
+    color: hsl(var(--text-primary));
+  }
+
+  .mdx-content h3 {
+    @apply text-lg font-semibold mt-6 mb-3;
+    color: hsl(var(--text-primary));
+  }
+
+  .mdx-content p {
+    @apply text-sm leading-relaxed mb-4;
+    color: hsl(var(--text-secondary));
+  }
+
+  .mdx-content a {
+    @apply underline decoration-1 underline-offset-2 transition-colors duration-200;
+    color: hsl(var(--accent-blue));
+  }
+
+  .mdx-content a:hover {
+    color: hsl(var(--accent-blue-light));
+  }
+
+  .mdx-content ul {
+    @apply list-disc pl-6 mb-4 space-y-1;
+  }
+
+  .mdx-content ol {
+    @apply list-decimal pl-6 mb-4 space-y-1;
+  }
+
+  .mdx-content li {
+    @apply text-sm leading-relaxed;
+    color: hsl(var(--text-secondary));
+  }
+
+  .mdx-content blockquote {
+    @apply border-l-2 pl-4 my-4 italic;
+    border-color: hsl(var(--accent-blue));
+    color: hsl(var(--text-muted));
+  }
+
+  .mdx-content code {
+    @apply text-xs px-1.5 py-0.5 rounded;
+    background-color: hsl(var(--secondary));
+    color: hsl(var(--text-primary));
+  }
+
+  .mdx-content pre {
+    @apply rounded-md p-4 mb-4 overflow-x-auto;
+    background-color: hsl(var(--secondary));
+  }
+
+  .mdx-content pre code {
+    @apply p-0 bg-transparent;
+  }
+
+  .mdx-content hr {
+    @apply my-8;
+    border-color: hsl(var(--border));
+  }
+
+  .mdx-content strong {
+    @apply font-semibold;
+    color: hsl(var(--text-primary));
+  }
+
+  .mdx-content img {
+    @apply w-full h-auto rounded-lg my-6;
+  }
+
+  .dark .mdx-content img {
+    filter: invert(1) hue-rotate(180deg);
   }
 }

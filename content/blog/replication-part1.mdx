@@ -1,0 +1,89 @@
+---
+title: "Replication Part 1 - From DDIA"
+date: "2026-02-08"
+description: "intro to replication,single leader model,synchronous asynchronous replication mode,handling node outages"
+readTime: 3
+---
+I have been fascinated by replication while reading designing data intensive applications.It appears to be fairly simple and interesting.It has it's own nuances and trade-offs
+## What is Replication?
+
+Keeping copy or replica of same data across multiple servers or nodes located across multiple geographical locations connected via network is **replication**.
+
+- Keep the data geographically closer to your users **reduces latency**.
+
+- No single point of failure which allows the system to function even if some nodes have failed which results in **high availability**.
+
+- Increases **read throughput** through the number of machines.
+
+Replication is fairly easy when the data doesn't change over time but that's for a fantasy world. It poses challenges when the data changes from time to time and we have to copy the changes from one node to another.
+
+We will see some various ways to achieve replication.
+
+## Single Leader Model
+
+<img
+  src="/diagrams/single-leader-replication.svg"
+  alt="Single leader replication model"
+/>
+<b></b>
+Every machine which has the copy of the database is known as **replica**. 
+
+One replica is configured as the **leader** node which accepts all the write operations from clients and makes the changes to it's local storage.
+
+Rest of the replicas are known as **followers** which is mainly to serve read queries/requests from the client. The leader node sends the data change to all of the followers known as replication log or change stream. Each follower using the replication log updates it's local storage.
+
+Client can query either the leader or the follower.
+
+## Replication Modes
+
+We can configure the database to be synchronous or asynchronous. Here the tradeoff comes with **durability or performance** (life is about trade-offs I guess).
+
+### Synchronous Replication
+
+Here the leader waits for the followers to complete it's write and send acknowledgement to the leader. This opens up a problem if any follower crashes it makes the whole system come to a halt and effects the performance.
+
+### Asynchronous Replication
+
+Here the leader doesn't wait for acknowledgement from followers and continues to take write requests from client. But if the leader goes down all the writes that were taken up by leader at that point won't be updated in the followers which results in data loss and **weak durability**.
+
+## We need to set up new followers
+
+- To increase the no of replicas
+- To replace the failed nodes
+
+### How to set up new followers
+
+1. Take a consistent snapshot of the leader's db without taking a lock on db affects availability. Most database have this feature required for backups
+2. Copy the snapshot to the new follower node.
+3. The new follower connects to the leader and requests all the data changes that have occurred since the snapshot was taken. The snapshot should be associated with the exact position to the exact replication log of leader.
+4. As the follower processes the backlog of data changes and completes the process we say it has caught up. It can now continue to serve read queries to client and process data changes from the leader.
+
+## Handling Node Outages
+
+Any node can go down maybe due to a fault or planned maintenance. Systems that keep running despite individual node failures is key to high availability.
+
+### Follower Failure Recovery
+
+Each follower keeps a log of data changes it has received from the leader.
+
+If a follower crashes the follower can recover easily from the log it knows the last transaction that it processed before going down.
+
+The follower can connect to the leader and request changes that has occurred during the time the follower was disconnected.
+
+After applying the changes it has caught up with the leader and can continue receiving a stream of data changes before.
+
+### Leader Failure Recovery
+
+Leader failure is more trickier to handle because one of the followers has to be promoted to be the new leader and clients need to be reconfigured to send write requests to the new leader and the other followers need to start consuming the data changes from the new leader. This is known as failover.
+
+#### Steps involved in leader failover
+
+<br></br>
+
+1. **Determining that leader is down** - There are many causes which can take a leader down - power outages, network issues. Systems usually use timeouts to detect which node has gone down. Nodes frequently exchange messages with each other and if a node does not respond back for a configured time interval it's assumed to be dead
+2. **Choose a new leader from followers** - here we can elect a leader from the followers (we are having elections here as well xD). Usually the follower with most up-to-date changes from the previous leader is chosen as the next leader to minimize the data loss.
+3. **Reconfiguring new leader to accept writes** - Now clients need to reconfigure to send their write requests to the new leader. If the old leader comes back, the systems must make sure to recognise the new leader and become a follower.
+
+---
+
+That is it for this one in next one will cover replication logs, replication lag, eventual consistency, multi leader replication, leaderless replication and quorums
