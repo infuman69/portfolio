@@ -3,7 +3,9 @@ title: "Replication Part 1 - From DDIA"
 date: "2026-02-08"
 description: "intro to replication,single leader model,synchronous asynchronous replication mode,handling node outages"
 readTime: 3
-image: "/diagrams/single-leader-replication.png"
+image: "/diagrams/replication-part1/single-leader-replication.png"
+category: "technical"
+tags: ["distributed-systems", "databases", "system-design"]
 ---
 I have been fascinated by replication while reading designing data intensive applications.It appears to be fairly simple and interesting.It has it's own nuances and trade-offs
 ## What is Replication?
@@ -23,7 +25,7 @@ We will see some various ways to achieve replication.
 ## Single Leader Model
 
 <img
-  src="/diagrams/single-leader-replication.svg"
+  src="/diagrams/replication-part1/single-leader-replication.svg"
   alt="Single leader replication model"
 />
 <b></b>
@@ -87,4 +89,4 @@ Leader failure is more trickier to handle because one of the followers has to be
 
 ---
 
-That is it for this one in next one will cover replication logs, replication lag, eventual consistency, multi leader replication, leaderless replication and quorums
+That is it for this one in next one will cover replication logs, replication lag, eventual consistency and multi leader replication.

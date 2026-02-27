@@ -2,6 +2,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 225 50% 15%;
@@ -226,10 +230,65 @@ body {
   }
 
   .blog-subtitle {
-    @apply text-sm mb-8;
+    @apply text-sm mb-6;
     color: hsl(var(--text-secondary));
   }
 
+  /* Category tabs */
+  .blog-categories {
+    @apply flex items-center gap-5 mb-5;
+  }
+
+  .blog-category-btn {
+    @apply text-sm cursor-pointer transition-colors duration-200 pb-0.5;
+    color: hsl(var(--text-muted));
+    background: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .blog-category-btn:hover {
+    color: hsl(var(--accent-blue));
+  }
+
+  .blog-category-btn.active {
+    color: hsl(var(--accent-blue));
+    border-bottom-color: hsl(var(--accent-blue));
+  }
+
+  /* Tag chip list */
+  .blog-tag-list {
+    @apply flex flex-wrap gap-2 mb-8;
+  }
+
+  .blog-tag-chip {
+    @apply flex items-center gap-1.5 text-xs px-2 py-0.5 rounded-sm cursor-pointer transition-all duration-150;
+    background: none;
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--text-secondary));
+  }
+
+  .blog-tag-chip:hover {
+    border-color: hsl(var(--text-muted));
+    color: hsl(var(--text-primary));
+  }
+
+  .blog-tag-chip.active {
+    border-color: hsl(var(--accent-blue));
+    color: hsl(var(--accent-blue));
+    background-color: hsl(var(--accent-blue) / 0.06);
+  }
+
+  .blog-tag-count {
+    @apply text-xs;
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-tag-chip.active .blog-tag-count {
+    color: hsl(var(--accent-blue) / 0.7);
+  }
+
+  /* Post list */
   .blog-post-item {
     @apply py-6;
     border-bottom: 1px solid hsl(var(--border));
@@ -253,8 +312,49 @@ body {
     color: hsl(var(--text-secondary));
   }
 
+  .blog-post-meta-row {
+    @apply flex items-center gap-2 mt-1;
+  }
+
   .blog-post-readtime {
-    @apply text-xs mt-1;
+    @apply text-xs;
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-meta-sep {
+    @apply text-xs;
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-post-category {
+    @apply text-xs;
+    color: hsl(var(--text-muted));
+  }
+
+  /* Inline tags per post */
+  .blog-post-inline-tags {
+    @apply flex flex-wrap gap-1.5 mt-2;
+  }
+
+  .blog-inline-tag {
+    @apply text-xs px-1.5 py-0.5 rounded-sm cursor-pointer transition-all duration-150;
+    background: none;
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-inline-tag:hover {
+    border-color: hsl(var(--text-muted));
+    color: hsl(var(--text-secondary));
+  }
+
+  .blog-inline-tag.active {
+    border-color: hsl(var(--accent-blue));
+    color: hsl(var(--accent-blue));
+  }
+
+  .blog-no-results {
+    @apply text-sm py-10 text-center;
     color: hsl(var(--text-muted));
   }
 
@@ -274,8 +374,56 @@ body {
   }
 
   .blog-post-meta {
-    @apply text-sm mb-8;
+    @apply text-sm mb-4;
     color: hsl(var(--accent-blue));
+  }
+
+  /* Tags row on post page */
+  .blog-post-tag-row {
+    @apply flex flex-wrap gap-1.5 mb-6;
+  }
+
+  .blog-post-tag-chip {
+    @apply text-xs px-1.5 py-0.5 rounded-sm;
+    border: 1px solid hsl(var(--border));
+    color: hsl(var(--text-muted));
+  }
+
+  /* Table of contents */
+  .blog-toc {
+    @apply mb-6;
+  }
+
+  .blog-toc-title {
+    @apply text-xs tracking-widest uppercase mb-3;
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-toc-list {
+    @apply list-none space-y-2;
+  }
+
+  .blog-toc-item {
+    @apply flex items-baseline gap-3;
+  }
+
+  .blog-toc-number {
+    @apply text-xs shrink-0;
+    color: hsl(var(--text-muted));
+  }
+
+  .blog-toc-link {
+    @apply text-sm transition-colors duration-200;
+    color: hsl(var(--accent-blue));
+  }
+
+  .blog-toc-link:hover {
+    color: hsl(var(--accent-blue-light));
+  }
+
+  .blog-toc-divider {
+    @apply my-6;
+    border-color: hsl(var(--border));
   }
 
   /* MDX prose styling */
@@ -353,5 +501,37 @@ body {
 
   .dark .mdx-content img {
     filter: invert(1) hue-rotate(180deg);
+  }
+
+  .mdx-content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin: 1.5rem 0;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .mdx-content thead {
+    background-color: hsl(var(--muted));
+  }
+
+  .mdx-content th,
+  .mdx-content td {
+    border: 1px solid hsl(var(--border));
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+    color: hsl(var(--foreground));
+  }
+
+  .mdx-content th {
+    font-weight: 600;
+    color: hsl(var(--foreground));
+    white-space: nowrap;
+  }
+
+  .mdx-content tbody tr:nth-child(even) {
+    background-color: hsl(var(--muted));
   }
 }

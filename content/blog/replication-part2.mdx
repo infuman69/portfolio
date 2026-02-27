@@ -1,0 +1,247 @@
+---
+title: "Replication Part - 2"
+date: "2026-02-15"
+description: "replication logs, replication lag, reading your own writes, monotonic reads, consistent prefix reads,multi leader replication,write conflicts and multi leader replication topologies"
+readTime: 7
+image: "/diagrams/replication-part2/consistent-prefix-reads.png"
+category: "technical"
+tags: ["distributed-systems", "databases", "system-design"]
+---
+
+## How do we implement Replication Logs?
+
+there are several replication methods that are used in practice 
+
+
+### Statement based replication
+
+This is the simplest way of replication where every write request is logged by the leader and sends the statement to its followers.For relational database
+this means that every INSERT,UPDATE or DELETE statement is forwarded to followers and executes the SQL statement.
+
+although this sounds simple but breaks down for various kind of statements
+
+- Any statement that calls a nondeterministic functions NOW() to get the current time or RAND() to get a random number will generate different number on each replica
+
+- if the statement depends on existing data in the database they must be executed exactly the same order in each replica or else they will have different effect on diff replicas
+
+- Statements like triggers,stored procedure and user defined functions may result in different side effects on each replica 
+
+
+### Write Ahead Logs
+
+Every write that occurs in a database is appended in a log which is a sequence of bytes containing all the writes to the db.We can use this exact set of logs to build a replica from scratch on another nondeterministic
+the leader also sends the log across the network to it's followers to create exact same data structures that of the leader 
+
+WAL is mostly used in Postgres Oracle .The disadvantage of this method of replication is that the log contains very low level details of which bytes were changed in which disk blocks. this makes replication tightly coupled
+with the storage engine.in future if the database changes it's storage format it is not possible to run different versions of database software on the leader and it's followers
+
+### Logical log Replication 
+Rather tightly coupling the replication log and storage engine format ,we can use different log formats which allows decoupling.This kind of log is called logical log
+
+logical row usually describes writes to the database with the kind of operation and new or updated or deleted values 
+
+ - For an inserted row the log contains the new values of columns
+ - For an updated row the log contains enought information to identify the row and the new value of column with which it needs to be updated
+ - For a deleted row the log contains enough information to indetify the row through primary key or but if the primary key wasn't logged then the old values of the columns need to be logged
+
+A transaction modifying severaly rows produces several logical log records followed by a recording indicating the success of the transaction.
+
+since a logical log is decoupled from the storage engine format it is easier for leader and follower to use different versions of the database software or diff storage engines
+
+### Replication Lag 
+
+The inconsistencies between the updated leader (all writes goes to the leader) and the follower(which may or may not have processed the writes)
+is known as replication lag or followers lagging behind the leader.
+
+But if the user stops writing and waits for a while it will observe the followers eventually catch up to the leader and becomes consistent.This phenomenon is known as ***Eventual Consistency***
+
+This occurs usually in ***asynchronous replication*** when the leader doesn't wait for all the followers to catch up to become consistent.
+
+tho point to be noted there is no limit to how far a follower can fall behind.It can range from fraction of a second to several seconds or minutes
+
+large replication lag becomes a huge problem for applications.We will be discussing three problems that are likely to occur when there is a replication lag
+
+ - Reading Your Own Writes 
+
+ - Monotonic Reads
+
+ - Consistent Prefix Reads
+
+### Reading Your Own Writes
+
+<img
+  src="/diagrams/replication-part2/read-after-write.svg"
+  alt="Read After Write"
+  height="100"
+  width="100"
+/>
+<b></b>
+
+Consider a social media application like instagram where you must have updated your profile details but see old details for a while in profile views .
+Well this occurs primarily because of writes going to the leader and the replica where your details are read from, the new data hasn't reached the replica yet
+.to the user this looks like the data they submitted was lost 
+
+basically we need read your writes consistency.this guarantees that if the user reloads the page they will always see the updates submitted themselves.
+
+in various we can implement read your write consistency
+
+- if a user reads something about their profile or something they have modified it should be from leader so they always get the latest update.
+
+- if most things in application are editable by the user then reading everything from the leader won't be effective as it takes the advantage of reading from replica. what we can do 
+in this case is that at the time of the last update we can make all reads from the leader or monitor the replication lag between followers and leader to prevent queries from followers which are behind more than one minute from leader
+
+- if the replicas are distributed across various geographical location any request that needs to be served by the leader must be routed to the datacenter that contains the leader.
+
+### Monotonic Reads
+
+<img
+  src="/diagrams/replication-part2/monotonic-read.svg"
+  alt="Read After Write"
+  height="100"
+  width="100"
+/>
+<b></b>
+
+
+In this anamoly the user can see things going backwards in time .
+
+For example , you can refer to the above diagram a user sees a comment made to it's post when viewing it from follower 2 with less replication lag 
+but the comment is not there when it views it from follower 3 with greater replication lag because it has not picked up the write yet.
+the second query observes the system state at an earlier point of time than the first query.It is confusing for the user to see a disappearing comment.
+
+Monotonic read is a guarantee that a user won't see the state going backwards they will not read older data,a lesser guarantee than strong consistency but stronger guarantee for eventual consistency
+
+
+One way of acheiving monotonic read is to make sure that a user makes read requests from the same replica we do this by using hash of the user id.
+
+
+### Consistent Prefix Reads
+
+<img
+  src="/diagrams/replication-part2/consistent-prefix-reads.svg"
+  alt="Read After Write"
+  height="100"
+  width="100"
+/>
+<b></b>
+
+Refer to the above diagram 
+
+Consider a messaging platform like whatsapp where in a group of 3 ,Bob proposes to Alice but Alice rejects it and from Carol's view,she has seen the reply before the question because the write of the reply
+has been executed before the question write.   
+
+Preventing this kind of anamoly requires another kind of guarantee consistent prefix read.This guarantee makes sure if the sequence of writes happens in certain order then any user  reading those writes will see in that particular order
+
+
+### Multi Leader Replication
+
+<img
+  src="/diagrams/replication-part2/multi-leader-replication-datacenter.svg"
+  alt="Read After Write"
+  height="100"
+  width="100"
+/>
+<b></b>
+
+so far we have seen replication architecture using a single leader.One major disadvantage is that only one leader if the leader goes down writes will be lost so the natural progression can be increasing the no of leaders
+
+to accept writes. replication happens the same way each change that goes to leader has to be forwarded to each nondeterministic.
+
+### Use cases for Multi Leader Replication
+
+***Multi region datacenter***
+
+consider a database with replicas in several different datacenters.With a normal leader based replication the leader has to be in one in of the datacenters.
+
+in multi leader replication you can have a leader in each datacenter and within each datacenter regular leader replication is used
+
+***Comparion of Single and Multi Leader Replication***
+
+| Criteria | Single Leader Replication | Multi Leader Replication |
+|---|---|---|
+| Performance | Higher latency on writes | lower latency of writes because presence of local datacenter for users| 
+| Datacenter Outages | On Leader Failover leader election occurs | each datacenter can continue working independently of each other |
+| Network Outages | Very sensitive to problems in inter datacenter links writes are synchronous | Asynchronous replication with temporary outages does not prevent writes being processed| 
+
+
+mostly we discussed the advantages of multi leader replication but there is a huge disadvantage if the same data is concurrently modified in two different datacenters
+is known as a write conflicts, we will see how it's resolved in conflict resolution 
+
+### Handling Write conflicts
+
+<img
+  src="/diagrams/replication-part2/write-conflict.svg"
+  alt="Read After Write"
+  height="100"
+  width="100"
+/>
+<b></b>
+
+Consider the diagram where two users updating the title of a page one updates it to B ,another updates it to A.All these changes are applied to their local leader but when it's asynchronously replicated
+a conflict is detected
+
+ - ***Synchronous vs Asynchronous Conflict Detection*** - In a Single leader database the second write isn't picked up until the first one completes or abort the first one second one is executed.
+ In multi leader replication both of the writes are successful .We can make the conflict resolution synchronous by waiting for the write to be replicated before tell the user acknowledgement but decoupling
+ so will make us lose the advantage of making writes independently 
+
+ - ***Conflict Avoidance*** - Simplest start for conflict resolution is to avoid conflicts. The way to do this is making sure when the user edits their own data they are always routed
+ to same datacenter.But there can be a case where you might need to change the datacenter if the home datacenter fails or the user moves to a different location 
+
+ - ***Converging to Consitent State*** - one way to avoid conflict is to make sure each attribute converges to same state or eventually same in all replicas.There are various to 
+ achieve convergent conflict resolution.
+          - Last Write Wins (LWW) - give each write a some sort of hash ,long random number or timestamp and pick the write with the highest ID or which one is the latest write by timestamp
+            Although this approach is prone to data loss
+          - Merge all the values together  combine them in sorted order "A/B"
+          - Record the conflict in an explicit data structures and write application code to resolve the conflict at a later time
+ 
+
+### Multi Leader Replication Topologies
+
+you must be wondering what are topologies for multi leader replication well fear not topologies define the communication paths along which writes travels from one node to another
+until now we have only seen two leaders in that case only one topology is possible leader1 passess it's writes to leader 2 and vice versa.
+
+<img
+  src="/diagrams/replication-part2/multi-leader-replication-topologies.svg"
+  alt="Read After Write"
+  height="100"
+  width="100"
+/>
+<b></b>
+
+However with more than two leaders various topologies are possible :-
+
+ - ***All to All*** - Most general topology in which every leader sends the writes to every other leader 
+ - ***Circular*** - each node receives writes from one node and forwards it to other nodes.
+ - ***Star*** - One central node forwards writes to all of the other nodes.
+
+### How does replication work in these topologies?
+Each node is given a unique identifier and in the replication log,each write is tagged with the identifiers of all the nodes it has passed through.
+If a change comes first it's checked whether it's tagged with it's own identifier and if it is tagged then we ignore the change.
+
+### Problems with the topologies
+
+ ***Circular and Star*** - you may have figured it out already a single point of failure if one node goes down or crashes it interrupts the communication path until the node is fixed.
+
+ ***All to All*** - 
+ Consider an application with three leaders 1st client inserts a new record on the db on 1st leader,2nd client updates the value of the inserted record on third leader 
+ now it may happen the second leader receives the update of the record which doesn't exists already because it precedes the insertion of the new record.
+
+ That's it for this one will cover leaderless replication,read repairs,quorums,concurrent writes and version vectors.
+
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
