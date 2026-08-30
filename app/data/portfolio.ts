@@ -10,7 +10,7 @@ export const portfolioData = {
     },
     tagline: "Chronically online, developer, tinkerer.",
     currentlyReading: "Designing Data Intensive Applications",
-    bio: "Experienced in developing enterprise saas platforms with analytics and compliance first architecture.Building multi tenant systems,leveraging LLMs to power analytics pipelines."
+    bio: "Experienced in developing enterprise saas platforms with analytics and compliance first architecture.Building multi tenant systems,leveraging LLMs to power analytics pipelines.Occasinally I do digital artwork as well ,do check them out :)."
   },
 
   experiences: [
