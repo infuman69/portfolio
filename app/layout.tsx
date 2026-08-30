@@ -79,9 +79,12 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
+        {/* Cloudflare Web Analytics */}
         <Script
-          src="https://scripts.simpleanalyticscdn.com/latest.js"
+          src="https://static.cloudflareinsights.com/beacon.min.js"
           strategy="afterInteractive"
+          type="module"
+          data-cf-beacon='{"token": "a55eaf4cb59243cfb4c033501b559fbd"}'
         />
       </body>
     </html>
