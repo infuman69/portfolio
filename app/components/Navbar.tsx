@@ -14,6 +14,9 @@ export default function Navbar() {
           <Link href="/blog" className="nav-link">
             blog
           </Link>
+          <Link href="/artwork" className="nav-link">
+            artwork
+          </Link>
           <ThemeToggle />
         </div>
       </div>

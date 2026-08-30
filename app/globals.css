@@ -535,3 +535,171 @@ body {
     background-color: hsl(var(--muted));
   }
 }
+
+@layer components {
+  /* Artwork gallery — numbered sketchbook */
+  .art-gallery {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .art-header {
+    @apply mb-7;
+  }
+
+  .art-title {
+    @apply text-3xl font-light mb-2;
+    color: hsl(var(--text-primary));
+  }
+
+  .art-subtitle {
+    @apply text-sm;
+    color: hsl(var(--text-secondary));
+  }
+
+  /* Number strip — the only navigation */
+  .art-strip {
+    position: relative;
+    display: flex;
+    gap: 2px;
+    justify-content: safe center;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    /* Room for the focus ring — the scroll container clips vertically too. */
+    padding-block: 4px;
+    margin-bottom: 16px;
+  }
+
+  .art-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .art-num {
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    min-width: 40px;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.6;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    color: hsl(var(--text-muted) / 0.6);
+    transition: color 160ms ease;
+  }
+
+  .art-num:hover {
+    color: hsl(var(--text-primary) / 0.85);
+  }
+
+  .art-num.active {
+    color: hsl(var(--accent-blue));
+    cursor: default;
+  }
+
+  .art-num:focus-visible {
+    outline: 1px solid hsl(var(--accent-blue));
+    outline-offset: 2px;
+  }
+
+  /* Stage — capped by height so the strip never drifts */
+  .art-stage-row {
+    @apply flex justify-center;
+  }
+
+  .art-stage {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    max-height: min(64vh, 620px);
+    overflow: hidden;
+    background-color: hsl(var(--secondary));
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    transition: opacity 200ms ease, transform 200ms ease;
+    touch-action: pan-y;
+  }
+
+  .art-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 260ms ease;
+  }
+
+  .art-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(28px, 6vw, 44px);
+    font-weight: 300;
+    letter-spacing: 0.06em;
+    color: hsl(var(--text-muted) / 0.55);
+    background-image: repeating-linear-gradient(
+      45deg,
+      hsl(var(--border) / 0.6) 0 1px,
+      transparent 1px 10px
+    );
+  }
+
+  .art-caption-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding-top: 16px;
+  }
+
+  .art-caption {
+    @apply text-sm;
+    color: hsl(var(--text-secondary));
+    transition: opacity 200ms ease;
+  }
+
+  .art-hint {
+    @apply text-xs mt-3;
+    color: hsl(var(--text-muted) / 0.7);
+  }
+
+  @media (max-width: 640px) {
+    .art-num {
+      padding: 10px 12px;
+      min-height: 40px;
+    }
+
+    .art-stage {
+      width: 100%;
+      max-height: min(52vh, 420px);
+    }
+
+    .art-caption-row {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .art-hint {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art-stage {
+      transition: opacity 100ms ease;
+      transform: none !important;
+    }
+
+    .art-image,
+    .art-caption {
+      transition: opacity 100ms ease;
+    }
+  }
+}
