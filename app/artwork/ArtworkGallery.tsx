@@ -182,7 +182,7 @@ export default function ArtworkGallery({ pieces }: Props) {
       <header className="art-header">
         <h1 className="art-title">artwork</h1>
         <p className="art-subtitle">
-          a sketchbook, one plate at a time.
+          a sketchbook, one page at a time.
         </p>
         <p className="art-hint">← → to step, or pick a plate</p>
       </header>
