@@ -110,6 +110,11 @@ export const portfolioData = {
       name: "Email",
       url: "mailto:saharoy.soham123@gmail.com",
       ariaLabel: "Email"
+    },
+    {
+      name: "Resume",
+      url: "https://drive.google.com/file/d/1m6XH5H8sNuV81q4MkQ5pHcxT8ql5QOQj/view?usp=sharing",
+      ariaLabel: "Resume"
     }
   ]
 };

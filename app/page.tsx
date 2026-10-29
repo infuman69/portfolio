@@ -39,14 +39,16 @@ export default function Home() {
 
       <div className="min-h-screen bg-[hsl(var(--background))] text-[hsl(var(--foreground))]">
         <main className="page-container">
-          <h1 className="text-5xl md:text-6xl font-light italic text-[hsl(var(--text-primary))] mb-4">
-            {portfolioData.personal.name}
-          </h1>
+          <header className="flex items-center justify-between gap-4 mb-4">
+            <h1 className="text-5xl md:text-6xl font-light italic text-[hsl(var(--text-primary))]">
+              {portfolioData.personal.name}
+            </h1>
+            <Socials />
+          </header>
 
           <About />
           <Work />
           {/* <Projects /> */}
-          <Socials />
         </main>
       </div>
     </>

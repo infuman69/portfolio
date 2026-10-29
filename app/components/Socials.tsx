@@ -1,4 +1,4 @@
-import { Mail } from "lucide-react";
+import { FileText, Mail } from "lucide-react";
 import { portfolioData } from "../data/portfolio";
 
 const SocialIcon = ({ name }: { name: string }) => {
@@ -26,6 +26,8 @@ const SocialIcon = ({ name }: { name: string }) => {
       );
     case "Email":
       return <Mail size={20} />;
+    case "Resume":
+      return <FileText size={20} />;
     default:
       return null;
   }
@@ -33,8 +35,8 @@ const SocialIcon = ({ name }: { name: string }) => {
 
 export default function Socials() {
   return (
-    <section>
-      <div className="flex gap-4">
+    <nav aria-label="Social links">
+      <div className="flex items-center gap-4">
         {portfolioData.socials.map((social, index) => (
           <a
             key={index}
@@ -48,6 +50,6 @@ export default function Socials() {
           </a>
         ))}
       </div>
-    </section>
+    </nav>
   );
 }
