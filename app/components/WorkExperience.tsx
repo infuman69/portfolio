@@ -77,8 +77,10 @@ export default function WorkExperience({
       </button>
 
       <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isExpanded ? "max-h-150 opacity-100" : "max-h-0 opacity-0"
+        className={`transition-all duration-300 ease-in-out ${
+          isExpanded
+            ? "max-h-150 opacity-100 overflow-y-auto pr-2 themed-scrollbar"
+            : "max-h-0 opacity-0 overflow-hidden"
         }`}
       >
         <ul className="work-description max-w-2xl space-y-1 mt-2 list-none">
