@@ -113,7 +113,7 @@ export const portfolioData = {
     },
     {
       name: "Resume",
-      url: "https://drive.google.com/file/d/1m6XH5H8sNuV81q4MkQ5pHcxT8ql5QOQj/view?usp=sharing",
+      url: "https://drive.google.com/file/d/1ifRLN1WKj20N4lpodrsAxVnDsj4T86nI/view?usp=sharing",
       ariaLabel: "Resume"
     }
   ]
